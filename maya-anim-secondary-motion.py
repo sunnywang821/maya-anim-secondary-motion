@@ -39,7 +39,7 @@ parent_obj = parent_obj[0]
 #############################################################################################
 # Define frame range because this should only work for a defined frame range
 start_frame = 1
-end_frame = 10
+end_frame = 50
 
 dt = 1
 mass = 1
@@ -128,11 +128,19 @@ pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
 pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
 # print(pos_current_obj_loc)
 
+# Get distance between the parent locator and child locator
+# So later on this distance can be used as constraint
+pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, start_frame)
+distance_default = distance_at_frame(pos_current_parent_loc, pos_current_obj_loc, start_frame)
+# print(distance)
+
 
 # Temporary override for ease of access DELETE LATER
 dt = 1
 mass = 1
 force= np.array([0, 0, 0])
+
+
 #############################################################################################
 # move the object to where the loc(child) is for the frame range
 # this doesn't move still idk
@@ -144,22 +152,31 @@ for frame in range(start_frame, end_frame + 1):
     
     # Verlet Integration
     pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
-    print(f"The next position of object is {pos_next_obj_loc}")
+    # print(f"The next position of object is {pos_next_obj_loc}")
     
     # constraint
     # update the next positon of the object locator with constraints applied
     # constaint: have a set distance between object locator and parent locator
+    # Get ratio of distance_default / distance_new
+    # This is because you can multiply the ratio with the vector from parent to child locator, to a new vector, that would
+    # have default distance between the locators
+    # Then you add the new vector to the current position so the distance is always default length
+    # """
     pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
-    distance = distance_at_frame(pos_current_parent_loc, pos_current_obj_loc, frame)
-    print(distance)
+    distance_new = distance_at_frame(pos_current_parent_loc, pos_next_obj_loc, frame)
+    print(f"The distance between the locators is {distance_new}")
     
+    distance_ratio =  distance_default / distance_new
+    pos_next_obj_loc = (pos_next_obj_loc - pos_current_parent_loc) * distance_ratio + pos_current_parent_loc
+    """
+    """
     # move and key the object locator
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
     
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
-    pos_current_obj_loc = pos_next_obj_loc
+    pos_current_obj_loc = pos_next_obj_loc 
 
 
 
