@@ -81,7 +81,7 @@ def compute_velocity(position1, position2, time_delta):
 
 
 # Calculating distance between given values and at given frame
-def distance(position1, position2, frame):
+def distance_at_frame(position1, position2, frame):
     cmds.currentTime(frame, edit=True)
     distance = np.linalg.norm(position2 - position1)
     return distance
@@ -106,14 +106,15 @@ if obj_loc:
 	cmds.delete(obj_loc)
 '''
 
+# set parent locator
 # create a loc at the at the parent object's position
 # and key it by following the parent obj according to the frame range
-pos_current_parent = get_world_space_at_frame(parent_obj, start_frame)
-parent_loc = creat_loc_at_position(pos_current_parent, "Parentloc")
+pos_current_parent_loc = get_world_space_at_frame(parent_obj, start_frame)
+parent_loc = creat_loc_at_position(pos_current_parent_loc, "Parentloc")
 
 for frame in range(start_frame, end_frame + 1):
-	pos_current_parent = get_world_space_at_frame(parent_obj, frame)
-	cmds.move(pos_current_parent[0], pos_current_parent[1], pos_current_parent[2], parent_loc, worldSpace=True)
+	pos_current_parent_loc = get_world_space_at_frame(parent_obj, frame)
+	cmds.move(pos_current_parent_loc[0], pos_current_parent_loc[1], pos_current_parent_loc[2], parent_loc, worldSpace=True)
 	cmds.setKeyframe(parent_loc, attribute="translate", t=frame)
 
 
@@ -145,9 +146,18 @@ for frame in range(start_frame, end_frame + 1):
     pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
     print(f"The next position of object is {pos_next_obj_loc}")
     
+    # constraint
+    # update the next positon of the object locator with constraints applied
+    # constaint: have a set distance between object locator and parent locator
+    pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
+    distance = distance_at_frame(pos_current_parent_loc, pos_current_obj_loc, frame)
+    print(distance)
+    
+    # move and key the object locator
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
     
+    # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
     pos_current_obj_loc = pos_next_obj_loc
 
