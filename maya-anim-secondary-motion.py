@@ -26,13 +26,13 @@ Base logic:
 #############################################################################################
 selected = cmds.ls(selection=True)
 if not selected:
-    cmds.warning("No object is selected")
+	cmds.warning("No object is selected")
 
 obj = selected[0]
 	
 parent_obj = cmds.listRelatives(obj, parent=True)
 if not parent_obj:
-    cmds.error(f"{obj} has no parent.")
+	cmds.error(f"{obj} has no parent.")
 
 parent_obj = parent_obj[0]
 
@@ -66,24 +66,24 @@ def get_world_space_at_frame(which_obj, frame):
 
 # Calculating velocity based on given values
 def compute_velocity(position1, position2, time_delta):
-    # Compute velocity (v = Δposition / Δtime).
-    return (position2 - position1) / time_delta
+	# Compute velocity (v = Δposition / Δtime).
+	return (position2 - position1) / time_delta
 
 
 # Create locator based on the given location
 def creat_locator_at_position(transform_values=[0, 0, 0], name="NameThis"):
-    locator = cmds.spaceLocator(name=name)
-    cmds.move(transform_values[0], transform_values[1], transform_values[2], locator, relative=True)
-    return locator
+	locator = cmds.spaceLocator(name=name)
+	cmds.move(transform_values[0], transform_values[1], transform_values[2], locator, relative=True)
+	return locator
 # remove "#" to test:
 # creat_locator_at_position()
 
 '''
 # need to delete the locators after using them
 if parent_locator: 
-    cmds.delete(parent_locator)
+	cmds.delete(parent_locator)
 if obj_locator:
-    cmds.delete(obj_locator)
+	cmds.delete(obj_locator)
 '''
 
 # create a locator at the at the parent object's position
@@ -92,9 +92,9 @@ pos1_parent = get_world_space_at_frame(parent_obj, frame)
 parent_locator = creat_locator_at_position(pos1_parent, "ParentLocator")
 
 for frame in range(start_frame, end_frame + 1):
-    pos1_parent = get_world_space_at_frame(parent_obj, frame)
-    cmds.move(pos1_parent[0], pos1_parent[1], pos1_parent[2], parent_locator, worldSpace=True)
-    cmds.setKeyframe(parent_locator, attribute="translate", t=frame)
+	pos1_parent = get_world_space_at_frame(parent_obj, frame)
+	cmds.move(pos1_parent[0], pos1_parent[1], pos1_parent[2], parent_locator, worldSpace=True)
+	cmds.setKeyframe(parent_locator, attribute="translate", t=frame)
 
 
 # create a locator at the starting frame of the object's position and key it
@@ -107,11 +107,7 @@ cmds.setKeyframe(obj_locator, attribute="translate", t=start_frame)
 # move the object to where the locator(child) is for the frame range
 # this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
-    pos_obj_locator_list_tuple = cmds.getAttr(f"{obj_locator[0]}.translate", time=frame)
-    pos_obj_locator = list(pos_obj_locator_list_tuple[0])
-    # print(pos_obj_locator[2])
-    cmds.xform(pos_obj_locator[0], pos_obj_locator[1], pos_obj_locator[2], obj, worldSpace=True)
-    cmds.setKeyframe(obj, attribute="translate", t=frame)
+
     
 
 
