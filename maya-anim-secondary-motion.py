@@ -1,4 +1,4 @@
-import maya.cmds as cmds
+ import maya.cmds as cmds
 import numpy as np
 
 """
@@ -17,7 +17,7 @@ Base logic:
 - Get position of selected object and its parent
 - Create locators at the object position and the parent's position 
 	The parent locator is going to have keys throughout so it matches parent location
-	with the given frame range
+	every frame with the given frame range
 	
 """
 
