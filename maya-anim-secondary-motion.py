@@ -1,4 +1,4 @@
- import maya.cmds as cmds
+import maya.cmds as cmds
 import numpy as np
 
 """
@@ -103,7 +103,9 @@ obj_locator = creat_locator_at_position(pos1_obj, "ObjLocator")
 cmds.setKeyframe(obj_locator, attribute="translate", t=start_frame)
 
 
+#############################################################################################
 # move the object to where the locator(child) is for the frame range
+# this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
     pos_obj_locator_list_tuple = cmds.getAttr(f"{obj_locator[0]}.translate", time=frame)
     pos_obj_locator = list(pos_obj_locator_list_tuple[0])
@@ -118,7 +120,7 @@ for frame in range(start_frame, end_frame + 1):
 
 
 
-
+"""
 for frame in range(start_frame, end_frame + 1):
     pos1_parent = get_world_space_at_frame(parent_obj, frame)
     pos2_parent = get_world_space_at_frame(parent_obj, frame + 1)
@@ -131,4 +133,6 @@ for frame in range(start_frame, end_frame + 1):
     # cmds.xform(obj, translation=new_velocity, worldSpace=True)
     cmds.move(new_velocity[0], new_velocity[1], new_velocity[2], obj, relative=True)
     cmds.setKeyframe(obj, attribute="translate", t=frame)
-    
+
+"""
+
