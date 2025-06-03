@@ -43,8 +43,7 @@ end_frame = 10
 
 dt = 1
 mass = 1
-force_x = 0
-force_y = -10/24 # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
+force= np.array([0, 0, 0]) # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
 
 
 # Getting worldspace values of a selected object at a certain frame
@@ -120,11 +119,16 @@ cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
 for frame in range(start_frame, end_frame + 1):
     cmds.currentTime(frame)
     
+    # Get position of locator
     pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, frame)
     pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, frame)
-    print(pos_current_obj_loc)
+    # print(pos_current_obj_loc)
+    
+    # acc = F / m
+    acc = 
+    
     # Verlet Integration
-    # pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + 
+    pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc
 
 
 
