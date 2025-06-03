@@ -112,23 +112,34 @@ pos_current_obj = get_world_space_at_frame(obj, start_frame)
 obj_loc = creat_loc_at_position(pos1_obj, "ObjLoc")
 cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
 
+# Get position of locator at starting frame because the loop below needs these initialized values
+pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
+pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
+# print(pos_current_obj_loc)
 
+
+# Temporary override for ease of access DELETE LATER
+dt = 1
+mass = 1
+force= np.array([0, 0, 0])
 #############################################################################################
 # move the object to where the loc(child) is for the frame range
 # this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
     cmds.currentTime(frame)
     
-    # Get position of locator
-    pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, frame)
-    pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, frame)
-    # print(pos_current_obj_loc)
-    
     # acc = F / m
-    acc = 
+    acc = force / mass
     
     # Verlet Integration
-    pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc
+    pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
+    print(pos_next_obj_loc)
+    
+    cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
+    cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
+    
+    pos_previous_obj_loc = pos_current_obj_loc
+    pos_current_obj_loc = pos_next_obj_loc
 
 
 
