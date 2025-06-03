@@ -143,7 +143,7 @@ for frame in range(start_frame, end_frame + 1):
     
     # Verlet Integration
     pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
-    print(pos_next_obj_loc)
+    print(f"The next position of object is {pos_next_obj_loc}")
     
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
