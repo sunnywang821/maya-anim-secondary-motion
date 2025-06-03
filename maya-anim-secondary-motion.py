@@ -44,7 +44,7 @@ end_frame = 10
 dt = 1
 mass = 1
 force_x = 0
-force_y = 10 # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
+force_y = -10/24 # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
 
 
 # Getting worldspace values of a selected object at a certain frame
@@ -88,17 +88,17 @@ if obj_locator:
 
 # create a locator at the at the parent object's position
 # and key it by following the parent obj according to the frame range
-pos1_parent = get_world_space_at_frame(parent_obj, frame)
-parent_locator = creat_locator_at_position(pos1_parent, "ParentLocator")
+pos_current_parent = get_world_space_at_frame(parent_obj, start_frame)
+parent_locator = creat_locator_at_position(pos_current_parent, "ParentLocator")
 
 for frame in range(start_frame, end_frame + 1):
-	pos1_parent = get_world_space_at_frame(parent_obj, frame)
-	cmds.move(pos1_parent[0], pos1_parent[1], pos1_parent[2], parent_locator, worldSpace=True)
+	pos_current_parent = get_world_space_at_frame(parent_obj, frame)
+	cmds.move(pos_current_parent[0], pos_current_parent[1], pos_current_parent[2], parent_locator, worldSpace=True)
 	cmds.setKeyframe(parent_locator, attribute="translate", t=frame)
 
 
 # create a locator at the starting frame of the object's position and key it
-pos1_obj = get_world_space_at_frame(obj, start_frame)
+pos_current_obj = get_world_space_at_frame(obj, start_frame)
 obj_locator = creat_locator_at_position(pos1_obj, "ObjLocator")
 cmds.setKeyframe(obj_locator, attribute="translate", t=start_frame)
 
@@ -107,7 +107,9 @@ cmds.setKeyframe(obj_locator, attribute="translate", t=start_frame)
 # move the object to where the locator(child) is for the frame range
 # this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
-
+    cmds.currentTime(frame)
+    
+    # Verlet Integration
     
 
 
@@ -131,4 +133,3 @@ for frame in range(start_frame, end_frame + 1):
     cmds.setKeyframe(obj, attribute="translate", t=frame)
 
 """
-
