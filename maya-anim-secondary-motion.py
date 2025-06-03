@@ -80,6 +80,15 @@ def compute_velocity(position1, position2, time_delta):
 	return (position2 - position1) / time_delta
 
 
+# Calculating distance between given values and at given frame
+def distance(position1, position2, frame):
+    cmds.currentTime(frame, edit=True)
+    distance = np.linalg.norm(position2 - position1)
+    return distance
+# remove "#" to test:
+# print(distance(np.array([0, 0, 0]), np.array([1, 1, 1]), 1))
+
+
 # Create loc based on the given location
 def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 	loc = cmds.spaceLocator(name=name)
@@ -87,6 +96,7 @@ def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 	return loc
 # remove "#" to test:
 # creat_loc_at_position()
+
 
 '''
 # need to delete the locs after using them
