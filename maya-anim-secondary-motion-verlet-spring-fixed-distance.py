@@ -173,15 +173,14 @@ for frame in range(start_frame, end_frame + 1):
     # This is because you can multiply the ratio with the vector from parent to child locator, to a new vector, that would
     # have default distance between the locators
     # Then you add the new vector to the current position so the distance is always default length
-    """
-    pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
+    # """
     distance_new = distance_at_frame(pos_current_parent_loc, pos_next_obj_loc, frame)
-    print(f"The distance between the locators is {distance_new}")
+    # print(f"The distance between the locators is {distance_new}")
     
     distance_ratio =  distance_default / distance_new
     pos_next_obj_loc = (pos_next_obj_loc - pos_current_parent_loc) * distance_ratio + pos_current_parent_loc
     
-    """
+    # """
     # move and key the object locator
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
