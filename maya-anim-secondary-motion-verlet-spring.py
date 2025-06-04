@@ -125,13 +125,14 @@ cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
 
 # Get position of locator at starting frame because the loop below needs these initialized values
 pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
-pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
+pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, (start_frame - 1))
 # print(pos_current_obj_loc)
 
-# Get distance between the parent locator and child locator
+# Get distance and displacement between the parent locator and child locator
 # So later on this distance can be used as constraint
 pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, start_frame)
 distance_default = distance_at_frame(pos_current_parent_loc, pos_current_obj_loc, start_frame)
+displacement_default = pos_current_obj_loc - pos_current_parent_loc
 # print(distance)
 
 
@@ -141,16 +142,25 @@ mass = 1
 force= np.array([0, 0, 0])
 
 # move this up LATER
-k = 20
-
+k = 0.1 # Higher the value, stiffer this becomes
+damping = 0.8
 #############################################################################################
 # move the object to where the loc(child) is for the frame range
 # this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
     cmds.currentTime(frame)
     
+    # current parent locator's position
+    pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
+    # distance between current parent locator's position and current object locator's position
+    displacement_new = pos_current_obj_loc - pos_current_parent_loc
+    displacement = displacement_new - displacement_default
+    
     # acc = F / m
+    # Fs = -kx
     acc = (-k * displacement) / mass
+    # acceleration override for when code breaks _(: 」∠)_
+    # acc = force / mass
     
     # Verlet Integration
     pos_next_obj_loc = pos_current_obj_loc + damping * (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
