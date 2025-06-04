@@ -120,7 +120,7 @@ for frame in range(start_frame, end_frame + 1):
 
 # create a loc at the starting frame of the object's position and key it
 pos_current_obj = get_world_space_at_frame(obj, start_frame)
-obj_loc = creat_loc_at_position(pos1_obj, "ObjLoc")
+obj_loc = creat_loc_at_position(pos_current_obj, "ObjLoc")
 cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
 
 # Get position of locator at starting frame because the loop below needs these initialized values
