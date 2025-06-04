@@ -44,7 +44,7 @@ end_frame = 50
 dt = 1
 mass = 1
 force= np.array([0, 0, 0]) # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
-
+damping = 0.95
 
 # Getting worldspace values of a selected object at a certain frame
 """ 
@@ -151,7 +151,7 @@ for frame in range(start_frame, end_frame + 1):
     acc = force / mass
     
     # Verlet Integration
-    pos_next_obj_loc = pos_current_obj_loc + (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
+    pos_next_obj_loc = pos_current_obj_loc + damping * (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
     # print(f"The next position of object is {pos_next_obj_loc}")
     
     # constraint
