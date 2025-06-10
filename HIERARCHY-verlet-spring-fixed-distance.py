@@ -3,8 +3,7 @@ import numpy as np
 
 """
 What code does:
-selected object(curve) and its descendents will move based off movement of parent
-(only works for single chain)
+selected object(curve) will move based off movement of parent
 
 Error handling:
 - check if there is object selected, and if it has a parent
@@ -23,7 +22,7 @@ Base logic:
 """
 
 #############################################################################################
-# ERROR HANDLING ############################################################################
+# ERROR HANDLING and selection ##############################################################
 #############################################################################################
 selected = cmds.ls(selection=True)
 if not selected:
@@ -60,6 +59,10 @@ mass = 1
 force= np.array([0, 0, 0]) # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
 damping = 0.95
 
+
+#############################################################################################
+# FUNCTIONS #################################################################################
+#############################################################################################
 # Getting worldspace values of a selected object at a certain frame
 """ 
 *NOTES:
@@ -112,6 +115,9 @@ def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 # creat_loc_at_position()
 
 
+#############################################################################################
+# CODE ######################################################################################
+#############################################################################################
 '''
 # need to delete the locs after using them
 if parent_loc: 
