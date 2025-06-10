@@ -186,14 +186,14 @@ displacement_default_list.append(pos_current_obj_loc_list[0] - pos_current_paren
 n = len(pos_current_obj_loc_list) - 1
 for i in range(n):
     distance = distance_at_frame(pos_current_obj_loc_list[i + 1], pos_current_obj_loc_list[i], start_frame)
-    displacement = pos_current_obj_loc_list[i] - pos_current_obj_loc_list[i + 1]
+    displacement = pos_current_obj_loc_list[i + 1] - pos_current_obj_loc_list[i]
     
     distance_default_list.append(distance)
     displacement_default_list.append(displacement)
     print(i)
     i += 1
-print(distance_default_list)
-print(displacement_default_list)
+# print(f"the distance between each segment on {start_frame} is {distance_default_list}")
+# print(f"the displacement between each segment on {start_frame} is {displacement_default_list}")
 
 # Temporary override for ease of access DELETE LATER
 dt = 1
