@@ -324,8 +324,8 @@ for frame in range(start_frame, end_frame + 1):
     pos_current_obj_loc_list[0] = pos_next_obj_loc_list[0]
     
     for i in range(n):
-        pos_previous_obj_loc_list[i] = pos_current_obj_loc_list[i]
-        pos_current_obj_loc_list[i] = pos_next_obj_loc_list[i] 
+        pos_previous_obj_loc_list[i + 1] = pos_current_obj_loc_list[i + 1]
+        pos_current_obj_loc_list[i + 1] = pos_next_obj_loc_list[i + 1] 
 
 
 
