@@ -260,7 +260,7 @@ for frame in range(start_frame, end_frame + 1):
     pos_next_obj_loc_list.append(pos_next_obj_loc)
     
     for i in range(n):
-        next = pos_current_obj_loc_list[i] + damping * (pos_current_obj_loc_list[i] -  pos_previous_obj_loc[i]) + acc_list[i] * dt * dt
+        next = pos_current_obj_loc_list[i] + damping * (pos_current_obj_loc_list[i] -  pos_previous_obj_loc_list[i]) + acc_list[i] * dt * dt
         pos_next_obj_loc_list.append(next)
     
     # constraint
@@ -277,6 +277,16 @@ for frame in range(start_frame, end_frame + 1):
     distance_ratio =  distance_default / distance_new
     pos_next_obj_loc = (pos_next_obj_loc - pos_current_parent_loc) * distance_ratio + pos_current_parent_loc
     
+    pos_next_obj_loc_list = []
+    pos_next_obj_loc_list.append(pos_next_obj_loc)
+    
+    for i in range(n):
+        distance_new = distance_at_frame(pos_current_obj_loc_list[i], pos_next_obj_loc_list[i], frame)
+        
+        distance_ratio = distance_default / distance_new
+        pos_next = (pos_next_obj_loc_list[i] - pos_current_obj_loc_list[i])
+        
+        distance_new_list.append(pos_next)
     # """
     # move and key the object locator
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
