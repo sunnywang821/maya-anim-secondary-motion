@@ -248,6 +248,7 @@ for frame in range(start_frame, end_frame + 1):
     for i in range(n):
         acc = (-k * displacement_list[i]) / mass
         acc_list.append(acc)
+        i += 1
     
     # acceleration override for when code breaks _(: 」∠)_
     # acc = force / mass
@@ -262,6 +263,7 @@ for frame in range(start_frame, end_frame + 1):
     for i in range(n):
         next = pos_current_obj_loc_list[i] + damping * (pos_current_obj_loc_list[i] -  pos_previous_obj_loc_list[i]) + acc_list[i] * dt * dt
         pos_next_obj_loc_list.append(next)
+        i += 1
     
     # constraint
     # update the next positon of the object locator with constraints applied
@@ -270,7 +272,7 @@ for frame in range(start_frame, end_frame + 1):
     # This is because you can multiply the ratio with the vector from parent to child locator, to a new vector, that would
     # have default distance between the locators
     # Then you add the new vector to the current position so the distance is always default length
-    # """
+    """
     distance_new = distance_at_frame(pos_current_parent_loc, pos_next_obj_loc, frame)
     # print(f"The distance between the locators is {distance_new}")
     
@@ -287,21 +289,34 @@ for frame in range(start_frame, end_frame + 1):
         pos_next = (pos_next_obj_loc_list[i] - pos_current_obj_loc_list[i])
         
         distance_new_list.append(pos_next)
-    # """
+        
+        i += 1
+    """
     # move and key the object locator
-    cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
+    cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc_list[0])
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
     
+    
+    for i in range(n):
+        cmds.xform(obj_loc_list[i + 1], ws=True, t=pos_next_obj_loc)
+        cmds.setKeyframe(obj_loc_list[i + 1], attribute="translate", t=frame)
+        
+        i += 1
+    """
     # move and key the selected object
     # cannot move directly with the values of the world matrix, because of frozen transformation
     # have to take into account of the displacement from world matrix, just have to minus the displacement
     pos_next_obj = pos_next_obj_loc - pos_default_obj
     cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
     cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
-    
+    """
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
     pos_current_obj_loc = pos_next_obj_loc 
+    
+    for i in range(n):
+        pos_previous_obj_loc_list[i] = pos_current_obj_loc_list[i]
+        pos_current_obj_loc_list[i] = pos_next_obj_loc_list[i] 
 
 
 
