@@ -116,8 +116,9 @@ def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 
 
 #############################################################################################
-# CODE ######################################################################################
+# CREATING LOCATORS #########################################################################
 #############################################################################################
+
 # set parent locator
 # create a loc at the at the parent object's position
 # and key it by following the parent obj according to the frame range
@@ -138,6 +139,10 @@ pos_initial_obj = get_world_space_at_frame(obj, start_frame)
 pos_current_obj = get_world_space_at_frame(obj, start_frame)
 obj_loc = creat_loc_at_position(pos_current_obj, "ObjLoc")
 cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
+
+#############################################################################################
+# INITIALIZING AND SETTING DEFAULT VALUES ###################################################
+#############################################################################################
 
 # Get position of locator at starting frame because the loop below needs these initialized values
 pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
@@ -160,7 +165,12 @@ force= np.array([0, 0, 0])
 # move this up LATER
 k = 0.1 # Higher the value, stiffer this becomes
 damping = 0.8
+
+
 #############################################################################################
+# LOOP N MOVE ###################################################
+#############################################################################################
+
 # move the object to where the loc(child) is for the frame range
 # this doesn't move still idk
 for frame in range(start_frame, end_frame + 1):
