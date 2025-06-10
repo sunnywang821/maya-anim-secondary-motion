@@ -30,11 +30,11 @@ if not selected:
 
 obj = selected[0]
 	
-parent = cmds.listRelatives(obj, parent=True)
-if not parent:
+parent_obj = cmds.listRelatives(obj, parent=True)
+if not parent_obj:
     cmds.error(f"{obj} has no parent.")
 
-parent = parent[0]
+parent_obj = parent_obj[0]
 
 obj_list = []
 obj_list.append(obj) # Add the selected object itself
