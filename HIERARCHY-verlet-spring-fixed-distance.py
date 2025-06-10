@@ -315,8 +315,8 @@ for frame in range(start_frame, end_frame + 1):
     for i in range(n):
         pos_next_obj = pos_next_obj_loc_list[i + 1] - pos_default_obj_list[i + 1]
         
-        cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
-        cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
+        cmds.xform(obj_list[i], ws=True, t=pos_next_obj)
+        cmds.setKeyframe(obj_list[i], attribute="translate", t=frame)
         i += 1
     # """
     # update positions so current becomes previous and next becomes current
