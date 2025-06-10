@@ -122,10 +122,8 @@ def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 # set parent locator
 # create a loc at the at the parent object's position
 # and key it by following the parent obj according to the frame range
-
 pos_current_parent_loc = get_world_space_at_frame(parent_obj, start_frame)
 parent_loc = creat_loc_at_position(pos_current_parent_loc, "Parentloc")
-
 
 
 for frame in range(start_frame, end_frame + 1):
@@ -134,11 +132,24 @@ for frame in range(start_frame, end_frame + 1):
 	cmds.setKeyframe(parent_loc, attribute="translate", t=frame)
 
 
+# set default pos for initial pos, and intialize position for current pos
 # create a loc at the starting frame of the object's position and key it
-pos_initial_obj = get_world_space_at_frame(obj, start_frame)
-pos_current_obj = get_world_space_at_frame(obj, start_frame)
-obj_loc = creat_loc_at_position(pos_current_obj, "ObjLoc")
-cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
+pos_default_obj_list = []
+pos_current_obj_list = []
+obj_loc_list = []
+number = 1
+
+for obj in obj_list:
+    pos_obj = get_world_space_at_frame(obj, start_frame)
+    
+    pos_default_obj_list.append(pos_obj)
+    pos_current_obj_list.append(pos_obj)
+    
+    loc_name = (f"ObjLoc_{number}")
+    obj_loc = creat_loc_at_position(pos_obj, loc_name)
+    cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
+    number += 1
+    
 
 #############################################################################################
 # INITIALIZING AND SETTING DEFAULT VALUES ###################################################
@@ -214,7 +225,7 @@ for frame in range(start_frame, end_frame + 1):
     # move and key the selected object
     # cannot move directly with the values of the world matrix, because of frozen transformation
     # have to take into account of the displacement from world matrix, just have to minus the displacement
-    pos_next_obj = pos_next_obj_loc - pos_initial_obj
+    pos_next_obj = pos_next_obj_loc - pos_default_obj
     cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
     cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
     
