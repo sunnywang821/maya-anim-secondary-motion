@@ -217,9 +217,9 @@ for frame in range(start_frame, end_frame + 1):
     # current parent locator's position
     pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
     # diplacement from parent locator to current object
-    displacement_new = pos_current_obj_loc - pos_current_parent_loc
+    displacement_new = pos_current_obj_loc_list[0] - pos_current_parent_loc
     # diplacement of the diplacement from parent locator to current object on current frame to previous frame
-    displacement = displacement_new - displacement_default
+    displacement = displacement_new - displacement_default_list[0]
     
     # distance segments between the descendents
     displacement_new_list = []
@@ -230,7 +230,7 @@ for frame in range(start_frame, end_frame + 1):
     
     for i in range(n):
         disp_new = pos_current_obj_loc_list[i] - pos_current_obj_loc_list[i + 1]
-        disp = disp_new - displacement_default
+        disp = disp_new - displacement_default_list[i]
         
         displacement_new_list.append(disp_new)
         displacement_list.append(disp)
@@ -254,7 +254,7 @@ for frame in range(start_frame, end_frame + 1):
     # acc = force / mass
     
     # Verlet Integration
-    pos_next_obj_loc = pos_current_obj_loc + damping * (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
+    pos_next_obj_loc = pos_current_obj_loc_list[0] + damping * (pos_current_obj_loc_list[0] - pos_previous_obj_loc) + acc * dt * dt
     # print(f"The next position of object is {pos_next_obj_loc}")
     
     pos_next_obj_loc_list = []
@@ -293,8 +293,8 @@ for frame in range(start_frame, end_frame + 1):
         i += 1
     """
     # move and key the object locator
-    cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc_list[0])
-    cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
+    cmds.xform(obj_loc_list[0], ws=True, t=pos_next_obj_loc_list[0])
+    cmds.setKeyframe(obj_loc_list[0], attribute="translate", t=frame)
     
     
     for i in range(n):
@@ -311,8 +311,8 @@ for frame in range(start_frame, end_frame + 1):
     cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
     """
     # update positions so current becomes previous and next becomes current
-    pos_previous_obj_loc = pos_current_obj_loc
-    pos_current_obj_loc = pos_next_obj_loc 
+    pos_previous_obj_loc_list[0] = pos_current_obj_loc_list[0]
+    pos_current_obj_loc_list[0] = pos_next_obj_loc_list[0]
     
     for i in range(n):
         pos_previous_obj_loc_list[i] = pos_current_obj_loc_list[i]
