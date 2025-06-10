@@ -148,7 +148,10 @@ for obj in obj_list:
     loc_name = (f"ObjLoc_{number}")
     obj_loc = creat_loc_at_position(pos_obj, loc_name)
     cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
+    obj_loc_list.append(obj_loc)
+    
     number += 1
+
     
 
 #############################################################################################
@@ -159,6 +162,16 @@ for obj in obj_list:
 pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
 pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, (start_frame - 1))
 # print(pos_current_obj_loc)
+
+pos_current_obj_loc_list = []
+pos_previous_obj_loc_list = []
+for loc in obj_loc_list:
+    current = get_loc_world_space_at_frame(loc, start_frame)
+    previous = pos_previous_obj_loc = get_loc_world_space_at_frame(loc, (start_frame - 1))
+    
+    pos_current_obj_loc_list.append(current)
+    pos_previous_obj_loc_list.append(previous)
+
 
 # Get distance and displacement between the parent locator and child locator
 # So later on this distance can be used as constraint
