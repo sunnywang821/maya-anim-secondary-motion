@@ -123,7 +123,7 @@ def creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis"):
 # create a loc at the at the parent object's position
 # and key it by following the parent obj according to the frame range
 pos_current_parent_loc = get_world_space_at_frame(parent_obj, start_frame)
-parent_loc = creat_loc_at_position(pos_current_parent_loc, "Parentloc")
+parent_loc = creat_loc_at_position(pos_current_parent_loc, "ParentLoc")
 
 
 for frame in range(start_frame, end_frame + 1):
@@ -235,16 +235,33 @@ for frame in range(start_frame, end_frame + 1):
         displacement_new_list.append(disp_new)
         displacement_list.append(disp)
         i += 1
+    # I dunno what this gave me but it's scary
+    # print(displacement_list)
     
     # acc = F / m
     # Fs = -kx
     acc = (-k * displacement) / mass
+    
+    acc_list = []
+    acc_list.append(acc)
+    
+    for i in range(n):
+        acc = (-k * displacement_list[i]) / mass
+        acc_list.append(acc)
+    
     # acceleration override for when code breaks _(: 」∠)_
     # acc = force / mass
     
     # Verlet Integration
     pos_next_obj_loc = pos_current_obj_loc + damping * (pos_current_obj_loc - pos_previous_obj_loc) + acc * dt * dt
     # print(f"The next position of object is {pos_next_obj_loc}")
+    
+    pos_next_obj_loc_list = []
+    pos_next_obj_loc_list.append(pos_next_obj_loc)
+    
+    for i in range(n):
+        next = pos_current_obj_loc_list[i] + damping * (pos_current_obj_loc_list[i] -  pos_previous_obj_loc[i]) + acc_list[i] * dt * dt
+        pos_next_obj_loc_list.append(next)
     
     # constraint
     # update the next positon of the object locator with constraints applied
