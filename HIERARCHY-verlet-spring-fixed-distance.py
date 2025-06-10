@@ -182,14 +182,15 @@ displacement_default_list = []
 distance_default_list.append(distance_at_frame(pos_current_parent_loc, pos_current_obj_loc_list[0], start_frame))
 displacement_default_list.append(pos_current_obj_loc_list[0] - pos_current_parent_loc)
 
-i = 0
+
 n = len(pos_current_obj_loc_list) - 1
 for i in range(n):
-    distance = distance_at_frame(pos_current_obj_loc_list[i], pos_current_obj_loc_list[i - 1], start_frame)
-    displacement = pos_current_obj_loc_list[i - 1] - pos_current_obj_loc_list[i]
+    distance = distance_at_frame(pos_current_obj_loc_list[i + 1], pos_current_obj_loc_list[i], start_frame)
+    displacement = pos_current_obj_loc_list[i] - pos_current_obj_loc_list[i + 1]
     
     distance_default_list.append(distance)
     displacement_default_list.append(displacement)
+    print(i)
     i += 1
 print(distance_default_list)
 print(displacement_default_list)
