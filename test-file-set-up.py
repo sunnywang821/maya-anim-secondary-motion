@@ -1,5 +1,7 @@
 import maya.cmds as cmds
 
+cmds.file(new=True, force=True)
+
 def create_vertical_nurbs_hierarchy():
     normal_value = [0, 1, 0]
     # Create the root circle (PARENT)
