@@ -272,11 +272,11 @@ for frame in range(start_frame, end_frame + 1):
     # This is because you can multiply the ratio with the vector from parent to child locator, to a new vector, that would
     # have default distance between the locators
     # Then you add the new vector to the current position so the distance is always default length
-    # """
+    """
     distance_new = distance_at_frame(pos_current_parent_loc, pos_next_obj_loc, frame)
     # print(f"The distance between the locators is {distance_new}")
     
-    distance_ratio =  distance_default_list[0] / distance_new
+    distance_ratio =  distance_default / distance_new
     pos_next_obj_loc = (pos_next_obj_loc - pos_current_parent_loc) * distance_ratio + pos_current_parent_loc
     
     pos_next_obj_loc_list = []
@@ -285,13 +285,13 @@ for frame in range(start_frame, end_frame + 1):
     for i in range(n):
         distance_new = distance_at_frame(pos_current_obj_loc_list[i], pos_next_obj_loc_list[i], frame)
         
-        distance_ratio = distance_default_list[i] / distance_new
+        distance_ratio = distance_default / distance_new
         pos_next = (pos_next_obj_loc_list[i] - pos_current_obj_loc_list[i])
         
-        pos_next_obj_loc_list.append(pos_next)
+        distance_new_list.append(pos_next)
         
         i += 1
-    # """
+    """
     # move and key the object locator
     cmds.xform(obj_loc_list[0], ws=True, t=pos_next_obj_loc_list[0])
     cmds.setKeyframe(obj_loc_list[0], attribute="translate", t=frame)
@@ -302,14 +302,23 @@ for frame in range(start_frame, end_frame + 1):
         cmds.setKeyframe(obj_loc_list[i + 1], attribute="translate", t=frame)
         
         i += 1
-    """
+    # """
     # move and key the selected object
     # cannot move directly with the values of the world matrix, because of frozen transformation
     # have to take into account of the displacement from world matrix, just have to minus the displacement
-    pos_next_obj = pos_next_obj_loc - pos_default_obj
-    cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
+    pos_next_obj_list= [] 
+    pos_next_obj_list.append(pos_next_obj_loc_list[0] - pos_default_obj_list[0])
+
+    cmds.xform(obj_list[0], ws=True, t=pos_next_obj_list[0])
     cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
-    """
+    
+    for i in range(n):
+        pos_next_obj = pos_next_obj_loc_list[i + 1] - pos_default_obj_list[i + 1]
+        
+        cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
+        cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
+        i += 1
+    # """
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc_list[0] = pos_current_obj_loc_list[0]
     pos_current_obj_loc_list[0] = pos_next_obj_loc_list[0]
