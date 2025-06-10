@@ -158,11 +158,7 @@ for obj in obj_list:
 # INITIALIZING AND SETTING DEFAULT VALUES ###################################################
 #############################################################################################
 
-# Get position of locator at starting frame because the loop below needs these initialized values
-pos_current_obj_loc = get_loc_world_space_at_frame(obj_loc, start_frame)
-pos_previous_obj_loc = get_loc_world_space_at_frame(obj_loc, (start_frame - 1))
-# print(pos_current_obj_loc)
-
+# Get positions of locator at starting frame because the loop below needs these initialized values
 pos_current_obj_loc_list = []
 pos_previous_obj_loc_list = []
 for loc in obj_loc_list:
@@ -175,11 +171,28 @@ for loc in obj_loc_list:
 
 # Get distance and displacement between the parent locator and child locator
 # So later on this distance can be used as constraint
+# distance is between each segment
+# distance between parent and selected object is stored at 0
+# distance between selected object and its first child is stored at 1, so on and so forth
 pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, start_frame)
-distance_default = distance_at_frame(pos_current_parent_loc, pos_current_obj_loc, start_frame)
-displacement_default = pos_current_obj_loc - pos_current_parent_loc
-# print(distance)
 
+distance_default_list = []
+displacement_default_list = []
+
+distance_default_list.append(distance_at_frame(pos_current_parent_loc, pos_current_obj_loc_list[0], start_frame))
+displacement_default_list.append(pos_current_obj_loc_list[0] - pos_current_parent_loc)
+
+i = 0
+n = len(pos_current_obj_loc_list) - 1
+for i in range(n):
+    distance = distance_at_frame(pos_current_obj_loc_list[i], pos_current_obj_loc_list[i - 1], start_frame)
+    displacement = pos_current_obj_loc_list[i - 1] - pos_current_obj_loc_list[i]
+    
+    distance_default_list.append(distance)
+    displacement_default_list.append(displacement)
+    i += 1
+print(distance_default_list)
+print(displacement_default_list)
 
 # Temporary override for ease of access DELETE LATER
 dt = 1
