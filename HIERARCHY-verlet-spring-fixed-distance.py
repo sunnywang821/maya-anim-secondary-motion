@@ -216,9 +216,25 @@ for frame in range(start_frame, end_frame + 1):
     
     # current parent locator's position
     pos_current_parent_loc = get_loc_world_space_at_frame(parent_loc, frame)
-    # distance between current parent locator's position and current object locator's position
+    # diplacement from parent locator to current object
     displacement_new = pos_current_obj_loc - pos_current_parent_loc
+    # diplacement of the diplacement from parent locator to current object on current frame to previous frame
     displacement = displacement_new - displacement_default
+    
+    # distance segments between the descendents
+    displacement_new_list = []
+    displacement_list = []
+    
+    displacement_new_list.append(displacement_new)
+    displacement_list.append(displacement)
+    
+    for i in range(n):
+        disp_new = pos_current_obj_loc_list[i] - pos_current_obj_loc_list[i + 1]
+        disp = disp_new - displacement_default
+        
+        displacement_new_list.append(disp_new)
+        displacement_list.append(disp)
+        i += 1
     
     # acc = F / m
     # Fs = -kx
