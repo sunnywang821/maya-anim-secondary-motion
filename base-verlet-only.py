@@ -119,6 +119,7 @@ for frame in range(start_frame, end_frame + 1):
 
 
 # create a loc at the starting frame of the object's position and key it
+pos_initial_obj = get_world_space_at_frame(obj, start_frame)
 pos_current_obj = get_world_space_at_frame(obj, start_frame)
 obj_loc = creat_loc_at_position(pos_current_obj, "ObjLoc")
 cmds.setKeyframe(obj_loc, attribute="translate", t=start_frame)
@@ -168,34 +169,19 @@ for frame in range(start_frame, end_frame + 1):
     
     distance_ratio =  distance_default / distance_new
     pos_next_obj_loc = (pos_next_obj_loc - pos_current_parent_loc) * distance_ratio + pos_current_parent_loc
-    """
-    """
+    
     # move and key the object locator
     cmds.xform(obj_loc, ws=True, t=pos_next_obj_loc)
     cmds.setKeyframe(obj_loc, attribute="translate", t=frame)
+    
+    # move and key the selected object
+    # cannot move directly with the values of the world matrix, because of frozen transformation
+    # have to take into account of the displacement from world matrix, just have to minus the displacement
+    pos_next_obj_obj = pos_next_obj_loc - pos_initial_obj
+    cmds.xform(obj_list[0], ws=True, t=pos_next_obj_obj)
+    cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
     
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
     pos_current_obj_loc = pos_next_obj_loc 
 
-
-
-
-
-
-
-"""
-for frame in range(start_frame, end_frame + 1):
-    pos1_parent = get_world_space_at_frame(parent_obj, frame)
-    pos2_parent = get_world_space_at_frame(parent_obj, frame + 1)
-    velocity = compute_velocity(pos1_parent, pos2_parent, dt)
-    # print(f"the position of the parent object at frame {frame} is {pos1_parent}, at {(frame + 1)} is {pos2_parent}")
-    # print(f"the velocity of the parent object at frame {frame} is {velocity}")
-    new_velocity = velocity * -0.5
-    
-    
-    # cmds.xform(obj, translation=new_velocity, worldSpace=True)
-    cmds.move(new_velocity[0], new_velocity[1], new_velocity[2], obj, relative=True)
-    cmds.setKeyframe(obj, attribute="translate", t=frame)
-
-"""
