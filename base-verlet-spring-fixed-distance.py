@@ -190,10 +190,9 @@ for frame in range(start_frame, end_frame + 1):
     # cannot move directly with the values of the world matrix, because of frozen transformation
     # have to take into account of the displacement from world matrix, just have to minus the displacement
     pos_next_obj = pos_next_obj_loc - pos_initial_obj
-    cmds.xform(obj_list[0], ws=True, t=pos_next_obj)
-    cmds.setKeyframe(obj_list[0], attribute="translate", t=frame)
+    cmds.xform(obj, ws=True, t=pos_next_obj)
+    cmds.setKeyframe(obj, attribute="translate", t=frame)
     
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
     pos_current_obj_loc = pos_next_obj_loc 
-
