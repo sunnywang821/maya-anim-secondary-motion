@@ -196,3 +196,6 @@ for frame in range(start_frame, end_frame + 1):
     # update positions so current becomes previous and next becomes current
     pos_previous_obj_loc = pos_current_obj_loc
     pos_current_obj_loc = pos_next_obj_loc 
+
+cmds.delete(parent_loc)
+cmds.delete(obj_loc)
