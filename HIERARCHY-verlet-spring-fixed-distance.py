@@ -3,21 +3,36 @@ import numpy as np
 
 """
 What code does:
-selected object(curve) will move based off movement of parent
+selected object(curve) and its descendents will move based off movement of parent
 
 Error handling:
 - check if there is object selected, and if it has a parent
 
 Functions:
-- getting world space of object at given frames
-- getting velocity
-- creating loc based off of given location
+- get_world_space_at_frame(which_obj, frame)
+- get_loc_world_space_at_frame(which_loc, frame)
+- compute_velocity(position1, position2, time_delta)
+- distance_at_frame(position1, position2, frame)
+- creat_loc_at_position(transform_values=[0, 0, 0], name="NameThis")
 
-Base logic:
-- Get position of selected object and its parent
-- Create locs at the object position and the parent's position 
-	The parent loc is going to have keys throughout so it matches parent location
-	every frame with the given frame range
+Create locators:
+- create locator where the parent is and key it so it matches the parent’s positions 
+- for loop to create locators where the selected object is and all of its children and store the initial positions in a list
+- initialize the current positions in a list so they can be used and updated in loop
+- create locators at current position and key it
+
+Initializing values and setting default values
+- get distance and displacement between the parent and object locator so this can be used for constraining later
+
+LOOPING and actually moving the locators:
+- update time
+- get position of current parent locator
+- get the displacement: displacement is the displacement from the original displacement(current frame object to parent) to the new displacement(next frame object to parent)
+- acceleration from spring formula(using displacement above) inserted into the Verlet formula to get the next position of object locator
+- constrain object locator so its at a fixed distance from parent
+- move and key the object locator
+- move and key the selected object 
+- update positions so current becomes previous and next becomes current
 	
 """
 
