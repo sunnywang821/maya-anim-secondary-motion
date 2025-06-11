@@ -31,8 +31,8 @@ end_frame = 50
 dt = 1
 mass = 1
 force= np.array([0, 0, 0]) # 300 was the number from https://editor.p5js.org/gustavocp/sketches/z-6Ap6xla
-damping = 0.95
-
+damping = 0.8
+k = 0.1
 
 #############################################################################################
 # PUT SELECTED OBJ AND DESCENDANTS IN A LIST ################################################
@@ -47,7 +47,7 @@ obj_list = []
 obj_list.append(object) # Add the selected object itself
 
 # Get all descendents
-descendants = cmds.listRelatives(obj, allDescendents=True, fullPath=True) or []
+descendants = cmds.listRelatives(object, allDescendents=True, fullPath=True) or []
 descendants.reverse() # Dunno why the order is from tip to root, so this is to correct that
 # Filter for only the transform descendents and add to list
 for node in descendants:
@@ -157,15 +157,7 @@ def fixed_distance_wave(obj):
     displacement_default = pos_current_obj_loc - pos_current_parent_loc
     # print(distance)
     
-    
-    # Temporary override for ease of access DELETE LATER
-    dt = 1
-    mass = 1
-    force= np.array([0, 0, 0])
-    
-    # move this up LATER
-    k = 0.1 # Higher the value, stiffer this becomes
-    damping = 0.8
+
     #############################################################################################
     # move the object to where the loc(child) is for the frame range
     # this doesn't move still idk
